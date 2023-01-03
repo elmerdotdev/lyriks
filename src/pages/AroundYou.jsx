@@ -7,13 +7,17 @@ import { useGetSongsByCountryQuery } from '../redux/services/shazamCore';
 
 const AroundYou = () => {
   const [country, setCountry] = useState('');
+  const [countryName, setCountryName] = useState('');
   const [loading, setLoading] = useState(true);
   const { activeSong, isPlaying } = useSelector((state) => state.player);
   const { data, isFetching, error } = useGetSongsByCountryQuery(country);
 
   useEffect(() => {
     axios.get(`https://api.ipgeolocation.io/ipgeo?apiKey=${import.meta.env.VITE_GEO_API_KEY}`)
-      .then((res) => setCountry(res?.data?.country_code2))
+      .then((res) => {
+        setCountry(res?.data?.country_code2);
+        setCountryName(res?.data?.country_name);
+      })
       .catch((err) => console.log(err))
       .finally(() => setLoading(false));
   }, [country]);
@@ -25,7 +29,7 @@ const AroundYou = () => {
   return (
     <div className="flex flex-col">
       <h2 className="font-bold text-3xl text-white text-left mt-4 mb-10">
-        Around You <span className="font-black">{country}</span>
+        Around <span className="font-black">{countryName}</span>
       </h2>
 
       <div className="flex flex-wrap sm:justify-start justify-center gap-8">
