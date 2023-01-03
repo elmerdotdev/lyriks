@@ -12,13 +12,13 @@ const AroundYou = () => {
   const { data, isFetching, error } = useGetSongsByCountryQuery(country);
 
   useEffect(() => {
-    axios.get(`https://geo.ipify.org/api/v2/country?apiKey=${import.meta.env.VITE_GEO_API_KEY}`)
-      .then((res) => setCountry(res?.data?.location?.country))
+    axios.get(`https://api.ipgeolocation.io/ipgeo?apiKey=${import.meta.env.VITE_GEO_API_KEY}`)
+      .then((res) => setCountry(res?.data?.country_code2))
       .catch((err) => console.log(err))
       .finally(() => setLoading(false));
   }, [country]);
 
-  if (isFetching && loading) return <Loader title="Loading songs araound you" />;
+  if (isFetching && loading) return <Loader title="Loading songs around you" />;
 
   if (error && country) return <Error />;
 
